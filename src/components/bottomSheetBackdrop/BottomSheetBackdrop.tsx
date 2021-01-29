@@ -1,5 +1,6 @@
 import React, { memo, useCallback, useMemo, useRef } from 'react';
-import { TouchableWithoutFeedback } from 'react-native';
+// import { TouchableWithoutFeedback } from 'react-native';
+import { TapGestureHandler } from 'react-native-gesture-handler';
 import Animated, {
   interpolate,
   Extrapolate,
@@ -17,13 +18,13 @@ import {
   DEFAULT_ENABLE_TOUCH_THROUGH,
   DEFAULT_CLOSE_ON_PRESS,
 } from './constants';
-import { WINDOW_HEIGHT } from '../../constants';
+// import { WINDOW_HEIGHT } from '../../constants';
 import type { BottomSheetDefaultBackdropProps } from './types';
 import { styles } from './styles';
 
-const AnimatedTouchableWithoutFeedback = Animated.createAnimatedComponent(
-  TouchableWithoutFeedback
-);
+// const AnimatedTouchableWithoutFeedback = Animated.createAnimatedComponent(
+//   TouchableWithoutFeedback
+// );
 
 const BottomSheetBackdropComponent = ({
   animatedIndex,
@@ -59,16 +60,16 @@ const BottomSheetBackdropComponent = ({
   //#endregion
 
   //#region styles
-  const buttonAnimatedStyle = useAnimatedStyle(
-    () => ({
-      top: animatedIndex.value <= disappearsOnIndex ? WINDOW_HEIGHT : 0,
-    }),
-    [disappearsOnIndex]
-  );
-  const buttonStyle = useMemo(() => [style, buttonAnimatedStyle], [
-    style,
-    buttonAnimatedStyle,
-  ]);
+  // const buttonAnimatedStyle = useAnimatedStyle(
+  //   () => ({
+  //     top: animatedIndex.value <= disappearsOnIndex ? WINDOW_HEIGHT : 0,
+  //   }),
+  //   [disappearsOnIndex]
+  // );
+  // const buttonStyle = useMemo(() => [style, buttonAnimatedStyle], [
+  //   style,
+  //   buttonAnimatedStyle,
+  // ]);
   const containerAnimatedStyle = useAnimatedStyle(
     () => ({
       opacity: interpolate(
@@ -101,21 +102,26 @@ const BottomSheetBackdropComponent = ({
   //#endregion
 
   return closeOnPress ? (
-    <AnimatedTouchableWithoutFeedback
-      accessible={true}
-      accessibilityRole="button"
-      accessibilityLabel="Bottom Sheet backdrop"
-      accessibilityHint="Tap to close the Bottom Sheet"
-      onPress={handleOnPress}
-      style={buttonStyle}
+    <TapGestureHandler
+      // accessible={true}
+      // accessibilityRole="button"
+      // accessibilityLabel="Bottom Sheet backdrop"
+      // accessibilityHint="Tap to close the Bottom Sheet"
+      // onPress={handleOnPress}
+      onHandlerStateChange={handleOnPress}
+      // style={buttonStyle}
     >
       <Animated.View
+        accessible={true}
+        accessibilityRole="button"
+        accessibilityLabel="Bottom Sheet backdrop"
+        accessibilityHint="Tap to close the Bottom Sheet"
         ref={containerRef}
         style={containerStyle}
         // @ts-ignore
         animatedProps={containerAnimatedProps}
       />
-    </AnimatedTouchableWithoutFeedback>
+    </TapGestureHandler>
   ) : (
     <Animated.View pointerEvents={pointerEvents} style={containerStyle} />
   );
